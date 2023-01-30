@@ -17,7 +17,7 @@ export const Header = () => {
   const handleLogOut = () => {
     sessionStorage.removeItem("user");
     setUser({});
-    navigate("/");
+    // navigate("/");
   };
 
   return (
@@ -33,7 +33,7 @@ export const Header = () => {
                 <Link to="/dashboard" className="nav-link">
                   Dashborad
                 </Link>
-                <Link onClick={handleLogOut} to="#" className="nav-link">
+                <Link to="/" onClick={handleLogOut} className="nav-link">
                   Logout
                 </Link>
               </>

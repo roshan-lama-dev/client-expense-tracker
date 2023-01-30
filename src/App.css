@@ -10,3 +10,20 @@
   margin: auto;
   box-shadow: -5px 5px 15px 5px rgba(219, 219, 219, 0.596);
 }
+
+.form {
+  background: white;
+  border-radius: 5px;
+  padding: 1rem;
+  min-height: 100px;
+  box-shadow: -5px 5px 15px 5px grey;
+}
+
+.table {
+  margin-top: 2rem;
+  background: white;
+  border-radius: 5px;
+  padding: 1rem;
+  min-height: 100px;
+  box-shadow: -5px 5px 15px 5px grey;
+}
