@@ -68,3 +68,25 @@ export const getTransaction = async () => {
     };
   }
 };
+
+// delete function
+
+export const deleteTransaction = async (_ids) => {
+  try {
+    const userId = getUserIdFromStorage();
+
+    const { data } = await axios.delete(transUrl, {
+      headers: {
+        Authorization: userId,
+      },
+      data: _ids,
+    });
+
+    return data;
+  } catch (error) {
+    return {
+      status: "error",
+      message: error.message,
+    };
+  }
+};

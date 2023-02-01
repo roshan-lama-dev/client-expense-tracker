@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
-export const TransctionTable = ({ transaction }) => {
+import { deleteTransaction } from "../../helper/axiosHelper";
+export const TransctionTable = ({ transaction, fetchTransaction }) => {
   const [setchecked, userSetChecked] = useState(false);
 
   const [itemToDelete, setItemToDelete] = useState([]);
@@ -14,29 +15,42 @@ export const TransctionTable = ({ transaction }) => {
 
   const selecthandle = (e) => {
     const { checked, value } = e.target;
-    console.log(checked, value);
-    if (checked === true) {
-      userSetChecked(true);
+    if (checked) {
+      setItemToDelete(transaction.map((item) => item._id));
     } else {
-      userSetChecked(false);
+      setItemToDelete([]);
     }
   };
 
+  // create another handleonselect for the main checbox that adds all the trnascaation id into the itemtodelete usestate.
+
+  // give the includes it property to the checked status of the body checkbox
+
+  // handleOnChange for the body checkbox
   const handleonSelect = (e) => {
     const { checked, value } = e.target;
     console.log(checked, value);
-    if (checked === true) {
-      setItemToDelete([...itemToDelete, value]);
-    } else {
-      if (itemToDelete.includes(value)) {
-        itemToDelete.pop(value);
+
+    checked
+      ? setItemToDelete([...itemToDelete, value])
+      : setItemToDelete(itemToDelete.filter((item) => item !== value));
+
+    // console.log(itemToDelete);
+  };
+
+  const handleOnDelete = async () => {
+    if (window.confirm("Are you sure you want to delte the trsansaction?")) {
+      const { status, message } = await deleteTransaction(itemToDelete);
+
+      if (status === "success") {
+        fetchTransaction();
+        setItemToDelete([]);
+      } else {
+        console.log(message);
       }
     }
   };
-
-  const displayState = () => {
-    console.log(itemToDelete);
-  };
+  console.log(itemToDelete);
 
   return (
     <div>
@@ -48,6 +62,14 @@ export const TransctionTable = ({ transaction }) => {
                 type="checkbox"
                 value={transaction}
                 onChange={selecthandle}
+                checked={
+                  transaction.length
+                    ? transaction.length === itemToDelete.length
+                    : false
+                }
+
+                // why does the array hold the length even after deletion.
+                // why can't we use if else inside the checked property
               ></input>
             </th>
             <th>#</th>
@@ -63,10 +85,11 @@ export const TransctionTable = ({ transaction }) => {
                 <td>
                   {" "}
                   <input
-                    checked={setchecked}
+                    // checked={}
                     type="checkbox"
                     value={item._id}
                     onChange={handleonSelect}
+                    checked={itemToDelete.includes(item._id)}
                   ></input>{" "}
                 </td>
                 <td>{index + 1}</td>
@@ -85,18 +108,25 @@ export const TransctionTable = ({ transaction }) => {
             );
           })}
 
-          <tr>
+          <tr className="fw-bold">
             <td></td>
-            <td colSpan={2}>Total Amount</td>
+            <td colSpan={3}>Total Amount</td>
             <td>{calculateTotal}</td>
           </tr>
         </tbody>
       </Table>
-      <div className="d-grid">
-        <Button variant="danger" onClick={displayState} className="text-danger">
-          Delete
-        </Button>
-      </div>
+
+      {itemToDelete.length ? (
+        <div className="d-grid">
+          <Button
+            variant="danger"
+            onClick={handleOnDelete}
+            className="text-danger"
+          >
+            Delete {itemToDelete.length} item(s)
+          </Button>
+        </div>
+      ) : null}
     </div>
   );
 };

@@ -22,7 +22,10 @@ export const Dashboard = () => {
     <Layout>
       <TransForm fetchTransaction={fetchTransaction} />
       <div className="table">
-        <TransctionTable transaction={transaction} />
+        <TransctionTable
+          transaction={transaction}
+          fetchTransaction={fetchTransaction}
+        />
       </div>
     </Layout>
   );
