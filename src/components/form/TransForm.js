@@ -29,7 +29,7 @@ export const TransForm = ({ fetchTransaction }) => {
     console.log(data);
     fetchTransaction();
     //reset the form
-    setTransData(initialState);
+    setTransData({});
   };
   return (
     <div className="form">
